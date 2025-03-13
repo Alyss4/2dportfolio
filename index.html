@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <style>
+      /* Dans le but de display l'app sur toute la page */
+      @font-face{
+        font-family: monogram;
+        src: url(monogram.ttf);
+      }
+      body {
+        font-family: monogram, monospace;
+        font-size: 2rem;
+        overflow: hidden;
+      }
+      #app {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+      #textbox-container {
+        position: absolute;
+        display: none;
+        max-width: 10rem;
+        background-color: rgba(255, 255, 255, 0.603);  
+        border-radius: 3px;
+        border: 3px solid #614321f5;
+        padding: 1rem;
+        filter: drop-shadow(0 0 0.75rem rgb(112,112,112));
+        z-index: 1000;
+      }
+      #textbox-container p {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+      #textbox {
+        position: relative;
+        min-height: 4vh;
+        background: white;
+        border-radius: 3px;
+        outline-style: solid;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        word-spacing: 0.2rem;
+      }
+      .ui-text { 
+        margin: 0;
+        user-select: none;
+      }
+      .ui-close-btn {
+        font-family: monogram, monospace;
+        border-style: none;
+        border-radius: 3px;
+        padding: 0.50rem;
+        font-size: inherit;
+        background-color: #614321d8;
+      }
+      .btn-container {
+        display: flex;
+        justify-content: flex-end; 
+        margin-top: 1rem;
+      }
+
+
+      .note {
+        position: absolute;
+        left: 5%;
+        top: 1vh;
+        display: flex;
+        flex-direction: column;
+        color: rgba(238, 238, 238, 0.568);
+      }
+
+    </style>
+    <div id="app">
+      <div id="ui">
+        <p class="note">Clique autour pour bouger</p>
+        <div id="textbox-container" style="display: none">
+          <div class="textbox">
+            <p id="dialogue" class="ui-text"></p>
+            <div class="btn-container">
+              <button id="close" class="ui-close-btn"></button>
+            </div>
+          </div>
+        </div>
+      </div><!-- Toute la partie UI ( textbox...)-->
+      <canvas id="game"></canvas>
+    </div>
+    <script type="module" src="src/main.js"></script> <!-- Toute la partie Jeu-->
+  </body>
+</html>
