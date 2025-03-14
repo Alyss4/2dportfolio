@@ -1,6 +1,6 @@
-import { dialogueData, scaleFactor } from "./constants";
-import { k } from "./kaboomContext.js";
-import { displayDialogue, setCamScale, updateDialoguePosition } from "./utils";
+import { dialogueData, scaleFactor } from "../core/constants.js";
+import { k } from "../core/kaboomContext.js";
+import { displayDialogue, setCamScale, updateDialoguePosition } from "../core/utils.js";
 
 k.loadSprite("spritesheet", "./spritesheet.png", {
   sliceX: 39, // 624 ÷ 16 // Pour calculer : taille d'une frame ÷ sprite
@@ -14,12 +14,12 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
     "walk-up": { from: 1014, to: 1017, loop: true, speed: 8 },
   },
 });
-k.loadSprite("map", "./map.png");
+k.loadSprite("map", "./images/map.png");
 k.setBackground(k.Color.fromHex("#000000"));
 //créer scène principale
 k.scene("main", async () => { // async pour charger les fichiers de la map
 
-  const mapData = await (await fetch("./map.json")).json();
+  const mapData = await (await fetch("/maps/map.json")).json();
   const layers = mapData.layers; // couches de la map
   const map = k.add([k.sprite("map"), k.pos(0), k.scale(scaleFactor)]);
 
