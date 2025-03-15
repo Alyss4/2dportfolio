@@ -1,6 +1,8 @@
 import { dialogueData, scaleFactor } from "../core/constants.js";
 import { k } from "../core/kaboomContext.js";
 import { displayDialogue, setCamScale, updateDialoguePosition } from "../core/utils.js";
+import "./insideScene.js";
+
 
 k.loadSprite("spritesheet", "./spritesheet.png", {
   sliceX: 39, // 624 ÷ 16 // Pour calculer : taille d'une frame ÷ sprite
@@ -54,14 +56,16 @@ k.scene("main", async () => { // async pour charger les fichiers de la map
 
         // Dialogue qd collision
         
-        if (boundary.name) {
-          player.onCollide(boundary.name, () => {
-            player.isInDialogue = true;
-            displayDialogue(dialogueData[boundary.name],() => (player.isInDialogue = false));
-            updateDialoguePosition(k, player.pos.x, player.pos.y, k.camPos()); 
-          });
-        }
-      }
+        player.onCollide(boundary.name, () => {
+          if (boundary.name === "exit") {
+            k.go("insideScene"); // Change vers insideScene
+            return;
+          }
+          player.isInDialogue = true;
+          displayDialogue(dialogueData[boundary.name], () => (player.isInDialogue = false));
+          updateDialoguePosition(k, player.pos.x, player.pos.y, k.camPos());
+        });
+      }        
 
       continue;
     }
@@ -195,4 +199,4 @@ k.scene("main", async () => { // async pour charger les fichiers de la map
   });
 });
 
-k.go("main");
+k.go("main"); 

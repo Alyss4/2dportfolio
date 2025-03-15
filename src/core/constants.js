@@ -1,5 +1,6 @@
 export const scaleFactor = 4;
-
+export const scaleFactorInside = 0.9;
+export const scaleFactorInsidePlayer = 4;
 export const dialogueData = {
   pc: `C'est mon pc, avec une config de ouf!! `,
   "cs-degree": `Mon diplome de SIO <3`,
