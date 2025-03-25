@@ -40,56 +40,53 @@ k.scene("insideScene", async () => {
     "player",
   ]);
 
-  layers.forEach((layer) => {
-    if (layer.name === "Collisions") {
-      layer.objects.forEach((boundary) => {
-        let shape;
-      
-        if (boundary.polygon) {
-          const points = boundary.polygon.map((p) => k.vec2(boundary.x + p.x, boundary.y + p.y));
-          shape = new k.Polygon(points);
-        } else {
-          shape = new k.Rect(k.vec2(0), boundary.width, boundary.height);
-        }
-      
-        map.add([
-          k.area({ shape }),
-          k.body({ isStatic: true }),
-          k.pos(boundary.x, boundary.y),
-          boundary.name,
-        ]);
-      
-        if (boundary.name === "sortie") {
-          player.onCollide("sortie", () => k.go("main"));
-        } else if (boundary.name) {
-          player.onCollide(boundary.name, () => {
-            player.isInDialogue = true;
-            displayDialogue(dialogueData[boundary.name], () => (player.isInDialogue = false));
-            updateDialoguePosition(k, player.pos.x, player.pos.y, k.camPos());
-          });
-        }
-      });
-    }
-
-  if (layer.name === "Spawnpoint") {
-    layer.objects.forEach((entity) => {
-      console.log("Objet :", entity.name, "Coord :", entity.x, entity.y);
-      if (entity.name === "Spawnpointplayer") {
-        const spawnPosition = k.vec2(123.88908694773681, 304.7954052063735);
-        player.pos = spawnPosition;      
-        console.log("Joueur1spawnpoint", player.pos);
-        console.log("Joueur2 spawnpoint:", player.worldPos());
+  for (const layer of layers) {
+    if (layer.name === "Decors3") {
+      for (const Decors3 of layer.objects) {
+        player.onCollide(Decors3.name, () => {
+          if (Decors3.name === "exit") {
+            k.go("insideScene");
+            return;
+          }
+        });
       }
-    });
+      continue;
+    }
+    if (layer.name === "Spawnpoint") {
+      for (const entity of layer.objects) {
+        if (entity.name === "Spawnpointplayer") {
+          player.pos = k.vec2(123.88908694773681, 304.7954052063735);
+        }
+      }
+    }
   }
+
+  const collisions = [
+    { pos: [410, 310], size: [101, 15], name: "canapeCollision" },
+    { pos: [435, 420], size: [45, 65], name: "tvCollision" },
+    { pos: [580, 320], size: [40, 40], name: "fauteuil" },
+    { pos: [753.32, 440.68], size: [50, 50], name: "ordi" },
+    { pos: [1010.38, 475.43], size: [55, 100], name: "lit" },
+    { pos: [1001, 418], size: [40, 40], name: "chevet" },
+    { pos: [997.54, 190.08], size: [80.86, 10.84], name: "bureau" },
+    { pos: [1294.21, 107.44], size: [7.19, 82.82], name: "armoireChambre" },
+    { pos: [1160.32, 652.57], size: [88.78, 42.30], name: "commode" }
+  ];
+  collisions.forEach(({ pos, size, name }) => {
+    k.add([
+      k.area({ shape: new k.Rect(k.vec2(0), ...size) }),
+      k.body({ isStatic: true }),
+      k.pos(...pos),
+      name
+    ]);
   });
 
   setCamScale(k);
   k.onResize(() => setCamScale(k));
   k.onUpdate(() => {
-    console.log("Coord j marche: ", player.worldPos());
     k.camPos(player.worldPos().x, player.worldPos().y - 100);
   });
+
   k.onMouseDown((mouseBtn) => {
     if (mouseBtn !== "left" || player.isInDialogue) return;
     const worldMousePos = k.toWorld(k.mousePos());
@@ -156,4 +153,5 @@ k.scene("insideScene", async () => {
     }
   });
 });
+
 console.log("InsideScene ok");
