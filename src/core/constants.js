@@ -18,3 +18,14 @@ export const dialogueData = {
 
   exit: `Si tu veux exit le portfolio clique sur la croix! `,
 };
+
+export const interractionsDialogue = {
+  diplome: "J'ai obtenu mon diplome de BTS SIO en 2024 ! Actuellement je prepare un Bachelor conceptrice developpeuse d'applications en alternance au CESI a Nancy !",
+  tv: "J'adore regarder les videos Call of Duty de Pink Geek <3",
+  frigo: "C'est mon frigo, il est rempli de bonnes choses (et de restes oublies depuis trop longtemps...)",
+  ordi: "C'est mon ordinateur, mon outil de travail et de jeu !",
+  cv: "C'est mon bureau, tu peux y trouver mon CV !",
+  armoire: "Voici mon armoire, ou je range mes fringues et quelques reliques du passe.",
+  echarpe: "Echarpe adore faire ses griffes ici !"
+};
+

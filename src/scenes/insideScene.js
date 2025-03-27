@@ -1,4 +1,4 @@
-import { dialogueData, scaleFactorInside, scaleFactorInsidePlayer } from "../core/constants.js";
+import { dialogueData, interractionsDialogue, scaleFactorInside, scaleFactorInsidePlayer } from "../core/constants.js";
 import { k } from "../core/kaboomContext.js";
 import { displayDialogue, setCamScale, updateDialoguePosition } from "../core/utils.js";
 
@@ -60,17 +60,47 @@ k.scene("insideScene", async () => {
       }
     }
   }
+  const interractions = [
+    { pos: [379, 191], size: [50, 50], name: 'diplome' },
+    { pos: [463, 388], size: [50, 50], name: 'tv' },
+    { pos: [756, 216], size: [50, 50], name: 'frigo' },
+    { pos: [733, 462], size: [50, 50], name: 'ordi' },
+    { pos: [1062, 211], size: [50, 50], name: 'cv' },
+    { pos: [1293, 198], size: [50, 50], name: 'armoire' },
+    { pos: [1188, 333], size: [50, 50], name: 'echarpe' }
+  ];
+  
 
-  const collisions = [
+  const collisions = [ 
     { pos: [410, 310], size: [101, 15], name: "canapeCollision" },
     { pos: [435, 420], size: [45, 65], name: "tvCollision" },
     { pos: [580, 320], size: [40, 40], name: "fauteuil" },
     { pos: [753.32, 440.68], size: [50, 50], name: "ordi" },
-    { pos: [1010.38, 475.43], size: [55, 100], name: "lit" },
-    { pos: [1001, 418], size: [40, 40], name: "chevet" },
+    { pos: [960, 475], size: [100, 110], name: "lit" },
+    { pos: [981, 418], size: [40, 40], name: "chevet" },
     { pos: [997.54, 190.08], size: [80.86, 10.84], name: "bureau" },
     { pos: [1294.21, 107.44], size: [7.19, 82.82], name: "armoireChambre" },
-    { pos: [1160.32, 652.57], size: [88.78, 42.30], name: "commode" }
+    { pos: [1160.32, 652.57], size: [88.78, 42.30], name: "commode" },
+    { pos: [829, 89], size: [5, 175], name: "WallCouloirHaut" },
+    { pos: [953, 88], size: [10, 135], name: "WallHautGaucheChambre" },  
+    { pos: [983, 82], size: [370, 10], name: "WallHautChambre" },
+    { pos: [1335, 84], size: [10, 630], name: "WallDroiteChambre" },
+    { pos: [25, 225], size: [10, 146], name: "WallEntree" },  
+    { pos: [25, 371], size: [111, 10], name: "WallEntreeBas" },  
+    { pos: [151, 366], size: [10, 167], name: "WallSalonGauche" },  
+    { pos: [151, 533], size: [692, 10], name: "WallSalonBas" },  
+    { pos: [836, 412], size: [120, 313], name: "WallCouloirBas" },  
+    { pos: [955, 725], size: [409, 10], name: "WallChambreBas" },  
+    { pos: [854, 264], size: [111, 10], name: "WallCouloirHaut" },  
+    { pos: [174, 143], size: [635, 10], name: "WallCuisineHaut" },
+    { pos: [55, 145], size: [10, 136], name: "WallEntreeMilieu" },
+    { pos: [854, 127], size: [110, 140], name: "WallCouloirMilieu" },
+    { pos: [84, 112], size: [10, 160], name: "WallEntreeHaut" },
+    { pos: [114, 100], size: [10, 164], name: "WallEntreeHautCentre" },
+    { pos: [144, 100], size: [10, 165], name: "WallEntreeHautDroit" },
+    { pos: [756, 161], size: [5, 47], name: "frigo" },
+    { pos: [984, 147], size: [290, 6], name: "MurBlancChambre" },
+
   ];
   collisions.forEach(({ pos, size, name }) => {
     k.add([
@@ -83,9 +113,42 @@ k.scene("insideScene", async () => {
 
   setCamScale(k);
   k.onResize(() => setCamScale(k));
-  k.onUpdate(() => {
-    k.camPos(player.worldPos().x, player.worldPos().y - 100);
+  player.lastInteraction = null;
+
+k.onUpdate(() => {
+  k.camPos(player.worldPos().x, player.worldPos().y - 100);
+  console.log("Position du joueur :", player.pos.x, player.pos.y);
+
+  let isInteracting = false;
+
+  interractions.forEach(({ pos, size, name }) => {
+    const playerPos = player.pos;
+    if (
+      playerPos.x > pos[0] - size[0] / 2 &&
+      playerPos.x < pos[0] + size[0] / 2 &&
+      playerPos.y > pos[1] - size[1] / 2 &&
+      playerPos.y < pos[1] + size[1] / 2
+    ) {
+      isInteracting = true;
+
+      if (!player.isInDialogue && player.lastInteraction !== name) {
+        player.lastInteraction = name;
+
+        if (interractionsDialogue[name]) {
+          player.isInDialogue = true;
+          
+          displayDialogue(interractionsDialogue[name], () => {
+            player.isInDialogue = false;
+          }, player.pos.x, player.pos.y);
+        }
+      }
+    }
   });
+
+  if (!isInteracting) {
+    player.lastInteraction = null;
+  }
+});
 
   k.onMouseDown((mouseBtn) => {
     if (mouseBtn !== "left" || player.isInDialogue) return;
