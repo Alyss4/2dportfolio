@@ -60,6 +60,15 @@ k.scene("insideScene", async () => {
       }
     }
   }
+  const note = document.querySelector(".note");
+
+  function hideNote() {
+    if (note) {
+      note.style.display = "none";
+    }
+  }
+
+
   const interractions = [
     { pos: [379, 191], size: [50, 50], name: 'diplome' },
     { pos: [463, 388], size: [50, 50], name: 'tv' },
@@ -151,6 +160,7 @@ k.onUpdate(() => {
 });
 
   k.onMouseDown((mouseBtn) => {
+    hideNote();
     if (mouseBtn !== "left" || player.isInDialogue) return;
     const worldMousePos = k.toWorld(k.mousePos());
     player.moveTo(worldMousePos, player.speed);
@@ -185,6 +195,7 @@ k.onUpdate(() => {
   k.onKeyRelease(stopAnims);
 
   k.onKeyDown(() => {
+    hideNote();
     const keyMap = [
       k.isKeyDown("right"),
       k.isKeyDown("left"),
@@ -218,3 +229,4 @@ k.onUpdate(() => {
 });
 
 console.log("InsideScene ok");
+k.go("insideScene");
