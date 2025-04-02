@@ -23,7 +23,6 @@ k.scene("insideScene", async () => {
   const layers = mapData?.layers || [];
 
   if (layers.length === 0) {
-    console.error("pas de layer found!");
     return;
   }
 
@@ -126,7 +125,6 @@ k.scene("insideScene", async () => {
 
 k.onUpdate(() => {
   k.camPos(player.worldPos().x, player.worldPos().y - 100);
-  console.log("Position du joueur :", player.pos.x, player.pos.y);
 
   let isInteracting = false;
 
@@ -227,6 +225,4 @@ k.onUpdate(() => {
     }
   });
 });
-
-console.log("InsideScene ok");
 k.go("insideScene");
